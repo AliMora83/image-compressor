@@ -1,16 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React, { useState, useCallback } from "react";
-import { Upload, Image as ImageIcon, Loader } from "lucide-react";
+import { Upload, CloudDownload, Loader } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 
 export default function ImageCompressor() {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [files, setFiles] = useState<File[]>([]);
   const [processing, setProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
-  const [results, setResults] = useState<any>(null);
+  const [results, setResults] = useState(null);
 
   const onDrop = useCallback(
     async (
@@ -95,8 +97,8 @@ export default function ImageCompressor() {
   };
 
   return (
-    <div className=" bg-gray-800 p-8 h-auto">
-      <Card className="max-w-2xl mx-auto">
+    <div className="flex justify-center flex-col p-8 h-auto min-h-screen w-[80%] mx-auto">
+      <Card className="p-10 shadow-[0px_0px_40px_3px_rgba(59,_130,_246,_0.15)]">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
             NAMKA Image Compressor
@@ -118,7 +120,7 @@ export default function ImageCompressor() {
               </div>
             ) : (
               <>
-                <Upload className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+                <Upload className="w-8 h-8 mx-auto mb-4 text-gray-400" />
                 <p className="text-gray-600">
                   Drop your images here or click to select
                 </p>
@@ -136,8 +138,8 @@ export default function ImageCompressor() {
 
           {results && (
             <div className="mt-8 space-y-8">
-              <Alert>
-                <ImageIcon className="h-4 w-4" />
+              <Alert className="flex flex-col justify-center items-center">
+                {/* <ImageIcon className="h-4 w-4" /> */}
                 <AlertDescription>
                   Processed {results.totalFiles} files. Total space saved:{" "}
                   {formatBytes(results.totalSaved)}
@@ -148,21 +150,35 @@ export default function ImageCompressor() {
                 {results.files.map((file: any, index: number) => (
                   <div
                     key={index}
-                    className="p-4 bg-gray-800 rounded-lg flex justify-between items-center"
+                    className="p-4 bg-gray-800 rounded-lg flex justify-between items-center gap-10 text-sm"
                   >
-                    <span className="font-medium truncate">{file.name}</span>
-                    <div className="flex items-center space-x-4">
-                      <span className="text-green-600">
-                        {formatBytes(file.savedSize)} saved
+                    <div className="flex items-center space-x-8">
+                      <span className="font-medium truncate">{file.name}</span>
+                      <span className="text-slate-300 bg-slate-600 px-2 py-1 rounded">
+                        {formatBytes(file.originalSize)}
                       </span>
-                      <a
-                        href={file.url}
-                        download={file.name}
-                        className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-                      >
-                        Download
-                      </a>
                     </div>
+                    <div className="flex items-center space-x-8">
+                      <span className="text-green-600">
+                        {formatBytes(file.savedSize)}
+                      </span>
+                      <p className="text-green-600">
+                        Saved:{" "}
+                        {(
+                          ((file.originalSize - file.savedSize) /
+                            file.originalSize) *
+                          100
+                        ).toFixed(2)}
+                        %
+                      </p>
+                    </div>
+                    <a
+                      href={file.url}
+                      download={file.name}
+                      className="px-8 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+                    >
+                      <CloudDownload className="w-4 h-4 mx-auto" />
+                    </a>
                   </div>
                 ))}
               </div>
@@ -171,8 +187,12 @@ export default function ImageCompressor() {
         </CardContent>
       </Card>
       <div className="text-center pt-10">
-        <a href="https://www.openmindi.co.za" target="blank" rel="noopener noreferrer">
-          <p className="text-sm text-slate-400">Developed by: Ali Mora</p>
+        <a
+          href="https://www.openmindi.co.za"
+          target="blank"
+          rel="noopener noreferrer"
+        >
+          <p className="text-xs text-slate-400">Developed by Ali Mora</p>
         </a>
       </div>
     </div>
